@@ -12,22 +12,23 @@ TOKEN="iloveyou123"
 @app.route("/", methods=["GET", "POST"])
 def wechat():
     if request.method == "GET":
-        signature = request.args.get("signature")
-        timestamp = request.args.get("timestamp")
-        nonce = request.args.get("nonce")
-        echostr = request.args.get("echostr")
+    signature = request.args.get("signature", "")
+    timestamp = request.args.get("timestamp", "")
+    nonce = request.args.get("nonce", "")
+    echostr = request.args.get("echostr", "")
 
-        tmp_list = [TOKEN, timestamp, nonce]
-        tmp_list.sort()
-        tmp_str = ''.join(tmp_list)
-        hashcode = hashlib.sha1(tmp_str.encode("utf-8")).hexdigest()
+    if not signature or not timestamp or not nonce or not echostr:
+        return "缺少参数", 400
 
+    tmp_list = [TOKEN, timestamp, nonce]
+    tmp_list.sort()
+    tmp_str = ''.join(tmp_list)
+    hashcode = hashlib.sha1(tmp_str.encode("utf-8")).hexdigest()
 
-
-        if hashcode == signature:
-            return echostr
-        else:
-            return "Token 验证失败"
+    if hashcode == signature:
+        return echostr
+    else:
+        return "Token 验证失败", 403
 
     if request.method == "POST":
         xml_data = request.data
