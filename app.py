@@ -8,7 +8,8 @@ from collections import defaultdict
 app = Flask(__name__)
 like_counter = defaultdict(int)
 
-TOKEN="iloveyou123"
+TOKEN = "iloveyou123"
+
 @app.route("/", methods=["GET", "POST"])
 def wechat():
     if request.method == "GET":
@@ -17,18 +18,18 @@ def wechat():
         nonce = request.args.get("nonce", "")
         echostr = request.args.get("echostr", "")
 
-    if not signature or not timestamp or not nonce or not echostr:
-        return "缺少参数", 400
+        if not signature or not timestamp or not nonce or not echostr:
+            return "缺少参数", 400
 
-    tmp_list = [TOKEN, timestamp, nonce]
-    tmp_list.sort()
-    tmp_str = ''.join(tmp_list)
-    hashcode = hashlib.sha1(tmp_str.encode("utf-8")).hexdigest()
+        tmp_list = [TOKEN, timestamp, nonce]
+        tmp_list.sort()
+        tmp_str = ''.join(tmp_list)
+        hashcode = hashlib.sha1(tmp_str.encode("utf-8")).hexdigest()
 
-    if hashcode == signature:
-        return echostr
-    else:
-        return "Token 验证失败", 403
+        if hashcode == signature:
+            return echostr
+        else:
+            return "Token 验证失败", 403
 
     if request.method == "POST":
         xml_data = request.data
@@ -58,5 +59,6 @@ def wechat():
         response = make_response(reply)
         response.content_type = "application/xml"
         return response
+
 if __name__ == "__main__":
-            app.run(host="0.0.0.0", port=10000)
+    app.run(host="0.0.0.0", port=10000)
