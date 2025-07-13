@@ -12,10 +12,10 @@ TOKEN="iloveyou123"
 @app.route("/", methods=["GET", "POST"])
 def wechat():
     if request.method == "GET":
-    signature = request.args.get("signature", "")
-    timestamp = request.args.get("timestamp", "")
-    nonce = request.args.get("nonce", "")
-    echostr = request.args.get("echostr", "")
+        signature = request.args.get("signature", "")
+        timestamp = request.args.get("timestamp", "")
+        nonce = request.args.get("nonce", "")
+        echostr = request.args.get("echostr", "")
 
     if not signature or not timestamp or not nonce or not echostr:
         return "缺少参数", 400
